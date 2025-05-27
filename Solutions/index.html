@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local Community Event Portal</title>
+    <style>
+      #welcomeBanner {
+        background-color: lightblue;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .highlight {
+        font-weight: bold;
+        color: green;
+      }
+
+      .img-border {
+        border: 2px solid #444;
+        width: 100px;
+      }
+
+      form {
+        margin-top: 20px;
+      }
+
+      textarea {
+        width: 100%;
+      }
+    </style>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      function validatePhone(el) {
+        const regex = /^\d{10}$/;
+        if (!regex.test(el.value)) {
+          alert("Enter a valid 10-digit phone number.");
+        }
+      }
+
+      function showFee(event) {
+        const feeMap = {
+          workshop: "$20",
+          seminar: "$30",
+          meetup: "Free",
+        };
+        document.getElementById("feeDisplay").textContent =
+          "Fee: " + (feeMap[event.value] || "N/A");
+      }
+
+      function showConfirmation() {
+        document.getElementById("formOutput").value =
+          "Thank you for registering!";
+      }
+
+      function enlargeImage(el) {
+        el.style.width = "200px";
+      }
+
+      function countChars(el) {
+        document.getElementById(
+          "charCount"
+        ).textContent = `Characters: ${el.value.length}`;
+      }
+
+      function videoReady() {
+        document.getElementById("videoStatus").textContent =
+          "Video ready to play";
+      }
+
+      window.onbeforeunload = function () {
+        return "Are you sure you want to leave? Your form may not be saved.";
+      };
+
+      function savePreference(event) {
+        localStorage.setItem("eventType", event.value);
+      }
+
+      function loadPreference() {
+        const pref = localStorage.getItem("eventType");
+        if (pref) {
+          document.getElementById("eventType").value = pref;
+        }
+      }
+
+      function clearPreferences() {
+        localStorage.clear();
+        sessionStorage.clear();
+        alert("Preferences cleared.");
+      }
+
+      function findLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition, showError, {
+            enableHighAccuracy: true,
+            timeout: 5000,
+          });
+        } else {
+          alert("Geolocation not supported.");
+        }
+      }
+
+      function showPosition(position) {
+        document.getElementById(
+          "location"
+        ).textContent = `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
+      }
+
+      function showError(error) {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            alert("User denied location access.");
+            break;
+          case error.TIMEOUT:
+            alert("Location request timed out.");
+            break;
+          default:
+            alert("Error retrieving location.");
+        }
+      }
+    </script>
+  </head>
+  <body onload="loadPreference()">
+    <!-- Navigation -->
+    <nav>
+      <a href="#home">Home</a> | <a href="#events">Events</a> |
+      <a href="#contact">Contact</a> |
+      <a href="help.html" target="_blank">Help</a>
+    </nav>
+
+    <!-- Main -->
+    <main>
+      <!-- Welcome Banner -->
+      <div id="welcomeBanner">
+        <h1>Welcome to the Community Portal</h1>
+        <p>
+          Exclusive Offer:
+          <span style="color: red; font-weight: bold"
+            >Get 10% off on your first event!</span
+          >
+        </p>
+      </div>
+
+      <!-- Sections -->
+      <section id="home">
+        <h2 class="highlight">Home</h2>
+        <p class="highlight">Stay updated with the latest community events.</p>
+      </section>
+
+      <section id="events">
+        <h2>Event Gallery</h2>
+        <table>
+          <caption>
+            Past Community Events
+          </caption>
+          <tr>
+            <td>
+              <img
+                src="https://media.istockphoto.com/id/1044327020/photo/babylon-village-community-fair-in-argyle-park.jpg?s=612x612&w=0&k=20&c=j82cVGOQcMJpgVTXduy2j32PODgRMPsCemM74YfEvTs="
+                alt="Event 1"
+                title="Community Fair"
+                class="img-border"
+                height="200px"
+                width="400px"
+              />
+            </td>
+            <td>
+              <img
+                src="https://arts-festival.com/wp-content/uploads/2023/04/banners-with-good-crowd-2022.jpg"
+                alt="Event 2"
+                title="Art Fest"
+                class="img-border"
+                height="200px"
+                width="400px"
+              />
+            </td>
+            <td>
+              <img
+                src="https://img.freepik.com/free-photo/people-planting-tree-countryside_23-2149401189.jpg?semt=ais_hybrid&w=740"
+                alt="Event 3"
+                title="Tree Plantation"
+                class="img-border"
+                height="200px"
+                width="400px"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img
+                height="200px"
+                width="400px"
+                src="data:image/jpeg;base64,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"
+                alt="Event 4"
+                title="Health Camp"
+                class="img-border"
+              />
+            </td>
+            <td>
+              <img
+                src="https://t3.ftcdn.net/jpg/02/60/12/88/360_F_260128861_Q2ttKHoVw2VrmvItxyCVBnEyM1852MoJ.jpg"
+                alt="Event 5"
+                title="Food Drive"
+                class="img-border"
+                height="200px"
+                width="400px"
+              />
+            </td>
+            <td>
+              <img
+                src="https://media.istockphoto.com/id/1498170916/photo/a-couple-is-taking-a-bag-of-food-at-the-food-and-clothes-bank.jpg?b=1&s=612x612&w=0&k=20&c=vLFun8B03R7WlF8rXcvSmjRUGeSvWchFQW5HZLCXo08="
+                alt="Event 6"
+                title="Charity Run"
+                class="img-border"
+                height="200px"
+                width="400px"
+              />
+            </td>
+          </tr>
+        </table>
+      </section>
+
+      <section id="register">
+        <h2>Register for an Event</h2>
+        <form onsubmit="showConfirmation(); return false;">
+          <label
+            >Name:
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              required
+              autofocus /></label
+          ><br /><br />
+          <label
+            >Email:
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required /></label
+          ><br /><br />
+          <label>Date: <input type="date" name="date" required /></label
+          ><br /><br />
+          <label
+            >Event Type:
+            <select
+              name="event"
+              id="eventType"
+              onchange="showFee(this); savePreference(this)"
+            >
+              <option value="">Choose an event</option>
+              <option value="workshop">Workshop</option>
+              <option value="seminar">Seminar</option>
+              <option value="meetup">Meetup</option>
+            </select>
+          </label>
+          <span id="feeDisplay"></span><br /><br />
+          <label
+            >Message:<br />
+            <textarea
+              name="message"
+              rows="4"
+              onkeyup="countChars(this)"
+            ></textarea>
+          </label>
+          <p id="charCount">Characters: 0</p>
+          <br />
+          <label
+            >Phone:
+            <input
+              type="text"
+              onblur="validatePhone(this)"
+              placeholder="10-digit number" /></label
+          ><br /><br />
+          <button type="submit" onclick="showConfirmation()">Submit</button>
+          <output id="formOutput"></output>
+        </form>
+      </section>
+
+      <section id="video">
+        <h2>Event Invite</h2>
+        <video width="320" controls oncanplay="videoReady()">
+          <source
+            src="https://www.w3schools.com/html/mov_bbb.mp4"
+            type="video/mp4"
+          />
+          Your browser does not support video.
+        </video>
+        <p id="videoStatus"></p>
+      </section>
+
+      <section>
+        <h2>Preferences</h2>
+        <button onclick="clearPreferences()">Clear Preferences</button>
+      </section>
+
+      <section>
+        <h2>Find Nearby Events</h2>
+        <button onclick="findLocation()">Find Nearby Events</button>
+        <p id="location"></p>
+      </section>
+
+      <section>
+        <h2>Feedback</h2>
+        <img
+          src="https://via.placeholder.com/100x100?text=Click+Me"
+          ondblclick="enlargeImage(this)"
+          class="img-border"
+          title="Double click to enlarge"
+        /><br />
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Local Community Council. All rights reserved.</p>
+    </footer>
+    <script src="main.js"></script>
+  </body>
+</html>
